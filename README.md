@@ -5,4 +5,12 @@
 
 如何开发一个loader [文档地址](/loader/DOC.md)
 
-#### loader demo    
+#### loader demo   
+```js
+    //init 
+    npm install  
+    //run demo  
+    gulp 
+    //或者 
+    gulp webpack
+``` 
