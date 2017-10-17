@@ -2,7 +2,7 @@
   "name": "w-loader",
   "version": "1.0.0",
   "description": "webpack loader doc for cn ",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/xiaoxiangdaiyu/w-loader/issues"
   },
-  "homepage": "https://github.com/xiaoxiangdaiyu/w-loader#readme"
+  "homepage": "https://github.com/xiaoxiangdaiyu/w-loader#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-webpack": "^1.5.0",
+    "webpack": "^3.7.1"
+  }
 }
