@@ -1,0 +1,24 @@
+{
+  "name": "w-loader",
+  "version": "1.0.0",
+  "description": "webpack loader doc for cn ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaoxiangdaiyu/w-loader.git"
+  },
+  "keywords": [
+    "loader",
+    "doc",
+    "cn"
+  ],
+  "author": "qianjin.pan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xiaoxiangdaiyu/w-loader/issues"
+  },
+  "homepage": "https://github.com/xiaoxiangdaiyu/w-loader#readme"
+}
