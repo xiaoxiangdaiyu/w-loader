@@ -93,8 +93,83 @@ module.exports = function(source) {
 };
 ```  
 
-#### 四、不要在运行和模块之间保存状态
+#### 四、不要在运行和模块之间保存状态     
 
+* 一个loader相对于其他编译后的模块应该是独立的。 除非其可以自己处理这些状态  
+* 一个loader相对于同一模块之前的编译过程应该是独立的。
+
+#### 五、标明依赖   
+
+如果该loader引用了其他资源（例如文件系统）， 必须声明它们。这些信息用来是缓存的loader失效并且重新编译它们  
+
+```js  
+    var path = require("path");
+    module.exports = function(source) {
+	this.cacheable();
+	var callback = this.async();
+	var headerPath = path.resolve("header.js");
+	this.addDependency(headerPath);
+	fs.readFile(headerPath, "utf-8", function(err, header) {
+		if(err) return callback(err);
+		callback(null, header + "\n" + source);
+	});
+};
+```    
+
+#### 六、解析依赖  
+
+很多语言都提供了一些规范来声明依赖，例如css中的 @import 和 url(...)。这些依赖应该被模块系统所解析。  
+##### 下面是两种解决方式：
+* 1、将它们转化成require   
+* 2、 用this.resolve方法来解析路径  
+
+##### 下面是两个示例   
+
+* 1、css-loader: 将依赖转化成require，即用require来替换@import和 url(...)，解析对其他样式文件的依赖  
+* 2、less-loader: 不能像css-loader那样做，因为所有的less文件需要一起编译来解析变量和mixins。因此其通过一个公共的路径逻辑来扩展less编译过程。这个公共的逻辑使用this.resolve来解析带有module系统配置项的文件。例如aliasing, custom module directories等。  
+
+如果语言仅仅接受相对urls（如css中url(file) 总是代表./file），使用~来说明成模块依赖.  
+```js  
+    url(file) -> require("./file")
+    url(~module) -> require("module")
+```  
+
+
+#### 七、抽离公共代码  
+
+extract common code  我感觉还是翻译成上面的标题比较好。其实所有语言都遵循该思想，即封装  
+不要写出来很多每个模块都在使用的代码，在loader中创建一个runtime文件，将公共代码放在其中
+
+#### 八、避免写入绝对路径  
+
+不要把绝对路径写入到模块代码中。它们将会破坏hash的过程当项目的根目录发生改变的时候。应该使用loader-utils的 stringifyRequest方法来绝对路径转化为相对路径。   
+例子：  
+```js  
+    var loaderUtils = require("loader-utils");
+    return "var runtime = require(" +
+    loaderUtils.stringifyRequest(this, "!" + require.resolve("module/runtime")) +
+  ");";
+```  
+
+#### 九、使用peerDependencies来指明依赖的库 
+
+使用peerDependency允许应用开发者去在package.json里说明依赖的具体版本。这些依赖应该是相对开放的允许工具库升级而不需要重新发布loader版本。简而言之，对于peerDependency依赖的库应该是松耦合的，当工具库版本变化的时候不需要重新变更loader版本。  
+
+#### 十、可编程对象作为查询项  
+
+有些情况下，loader需要某些可编程的对象但是不能作为序列化的query参数被方法解析。例如less-loader通过具体的less-plugin提供了这种可能。这种情况下，loader应该允许扩展webpack的options对象去获得具体的option。为了避免名字冲突，基于loader的命名空间来命名是很必要的。
+
+```js  
+     // webpack.config.js
+    module.exports = {
+        ...
+    lessLoader: {
+        lessPlugins: [
+        new LessPluginCleanCSS({advanced: true})
+        ]
+    }
+};
+```  
   
 
 
