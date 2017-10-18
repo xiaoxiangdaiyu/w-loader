@@ -68,10 +68,6 @@ var webpackConfig = {
   ]
 };
 ``` 
-Accessing the compilation
-Using the compiler object, you may bind callbacks that provide a reference to each new compilation. These compilations provide callbacks for hooking into numerous steps within the build process.
-
-For more information on what callbacks are available on the compiler, compilation, and other important objects, see the plugins doc.  
 
 ## 访问编译    
 
@@ -117,10 +113,6 @@ HelloAsyncPlugin.prototype.apply = function(compiler) {
 
 module.exports = HelloAsyncPlugin;
 ```  
-Example
-Once we can latch onto the webpack compiler and each individual compilations, the possibilities become endless for what we can do with the engine itself. We can reformat existing files, create derivative files, or fabricate entirely new assets.
-
-Let's write a simple example plugin that generates a new build file called filelist.md; the contents of which will list all of the asset files in our build. This plugin might look something like this:
 
 ## 示例  
 
@@ -188,9 +180,7 @@ applyPluginsAsync(name: string, args: any..., callback: (err?: Error) -> void)
 ```    
 插件控制方法被调用，参数是所有的args和带有这种标志(err?: Error) -> void的回调。handler方法按照注册回调在所有handlers被调用之后的顺序来调用。对于"emit", "run"事件来说这是很常用的模式。
 
-#### 异步流   
-
-The plugin handler functions are called with the current value and a callback function with the signature (err: Error, nextValue: any) -> void. When called nextValue is the current value for the next handler. The current value for the first handler is init. After all handlers are applied, callback is called with the last value. If any handler passes a value for err, the callback is called with this error and no more handlers are called. This plugin pattern is expected for events like "before-resolve" and "after-resolve".  
+#### 异步流    
 
 这种插件将按照流失方式来被异步使用  
 
