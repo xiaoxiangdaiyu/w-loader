@@ -8,7 +8,8 @@
 
 如何开发一个插件 [文档地址](/plugin/DOC.md)
 
-#### loader demo   
+#### loader demo      
+
 ```js
     //init 
     npm install  
